@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container mt-4">
+    <form action="submit" , method="post">{% csrf_token %}
+        <div class="row" style="margin-left:35%; margin-top:10%">
+            <div class="col-4">
+                <h2 class="text-center">The Messenger</h2>
+                <div class="form-group">
+                    <label for="username">Usuario:</label>
+                    <input type="text" , class="form-control" id="username" name="username" placeholder="username">
+                </div>
+                <div class="form-group">
+                    <label for="password">Senha:</label>
+                    <input type="password" , class="form-control" id="password" name="password" placeholder="senha">
+                </div>
+                <div>
+                    {% for message in messages %}
+                    <div class="alert alert-danger">
+                        <strong>Erro!</strong> {{ message }}
+                    </div>
+                    {% endfor %}
+                    <button type="submit" class="btn btn-success">Login</button>
+                </div>
+            </div>
+
+    </form>
+</div>
+{% endblock content %}
