@@ -10,3 +10,9 @@ Messaging system between friends
 ## libraries
  - Django==3.0.3
  - python-decouple==3.3
+
+ ## Adicionado Configurações para decouple
+  - Adicionar arquivo .env na raiz do projeto
+  - Colocar seguintes parametros:
+  * SECRET_KEY=0atyt0aj^jy@w_*ylpmy9m$im4q_mahpiv8bkg&as-kh%6asg+
+  * DEBUG=True
