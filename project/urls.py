@@ -24,6 +24,8 @@ urlpatterns = [
     url(r'^submit', views.submit_login, name='submit_login'),
     url(r'^index', views.index, name='index'),
     url(r'^logout', views.logout_user, name='logout'),
+    url(r'^register', views.register, name='register'),
+    #url(r'^register_submit', views.register_submit, name='register_submit'),
     #url(r'^client/', views.client, name='client'),
     #path("",views.login_user),
     #path("submit",views.submit_login)
