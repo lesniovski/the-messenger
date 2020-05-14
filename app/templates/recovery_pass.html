@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container mt-4">
+    <form action="recovery_pass" method="post">{% csrf_token %}
+        <div class="row" style="margin-left: 35%; margin-top: 10%;">
+            <div class="col-5">
+                <h2 class="text-center">The Messenger</h2>
+                <h3 class="text-center" style="margin-top: 10%;">Recuperar Senha</h3>
+                <div>
+                    {% for message in msg %}
+                    <div class="alert alert-danger">
+                        <strong>Erro!</strong> {{ message }}
+                </div>
+                {% endfor %}
+                    
+                <div class="form-group; text-center" style="margin-top: 10%;">
+                    <label for="email">Informe o E-mail:</label>
+                    <input type="email", class="form-control" id="email" name="email" placeholder="Informe o Email">
+                </div>
+                <div class="text-center" style="margin-top: 10%;">
+                <button type="submit" class="btn btn-success">Recuperar Senha</button>
+                </div>
+                <div class="text-center" style="margin-top: 20%;"> 
+                    <a href="/">Voltar a página de Login</a>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+{% endblock content %}

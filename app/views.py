@@ -36,11 +36,10 @@ def submit_login(request):
     return redirect('/')
 
 @csrf_protect
-def register(request):
+def submit_register(request):
     data = {}
     data['msg'] = []
     if request.method == 'POST':
-        print('Passei aqui!')
         username = request.POST.get('username')
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
@@ -56,16 +55,19 @@ def register(request):
             val_email = User.objects.filter(email=email)
             if (len(val_username) > 0):
                 data['msg'].append('usuário já cadastrado!')
-                return render(request, 'register.html', data)
+                print("teste")
+                x = 1
             if (len(val_email) > 0):
                 data['msg'].append('E-mail já cadastrado!')
-                return render(request, 'register.html', data)
+                x = 1
         except:
             data['msg'].append('Erro ao verificar usuário ou email!')
             return render(request, 'register.html', data)
         
         if (password != rpassword):
             data['msg'].append('Senhas não conferem')
+            x = 1
+        if (x > 0):
             return render(request,'register.html', data)
         try:
             user = User(is_superuser=is_superuser,
@@ -85,6 +87,11 @@ def register(request):
             return render(request,'register.html', data)
     else:
         return render(request, 'register.html', data)
-    return render(request, 'register.html')
-#def register(request):
-    #return render(request, 'register.html')        
+
+def register(request):
+    print("teste register")
+    return render(request, 'register.html')        
+
+@csrf_protect
+def recovery_pass(request):
+    return render(request, 'recovery_pass.html')

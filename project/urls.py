@@ -21,6 +21,8 @@ from django.conf.urls import url
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', views.login_user, name='login'),
+    url(r'^submit_register', views.submit_register, name='submit_register'),
+    url(r'^recovery_pass', views.recovery_pass, name='recovery_pass'),
     url(r'^submit', views.submit_login, name='submit_login'),
     url(r'^index', views.index, name='index'),
     url(r'^logout', views.logout_user, name='logout'),
