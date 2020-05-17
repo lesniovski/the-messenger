@@ -104,12 +104,13 @@ def recovery_pass(request):
             if(email == ''):
                 data['error'].append('email inválido')
             else:
-                val_user = User.objects.get(email=email)
-                if (val_user != None):
+                val_user = User.objects.filter(email=email)
+                if (len(val_user) > 0):
                     newpass = randint(10000000,99999999)
-                    val_user.set_password(newpass)
-                    val_user.save()
-                    emailService.recoveryPass(newpass, val_user.username, email)
+                    user = User.objects.get(email=email)
+                    user.set_password(newpass)
+                    user.save()
+                    emailService.recoveryPass(newpass, user.username, email)
                     data['msg'].append('Sua nova senha foi enviada no email!')
                 else:
                     data['error'].append('email não cadastrado!')   
