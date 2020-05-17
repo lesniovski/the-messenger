@@ -6,6 +6,8 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .models import AuthUser
 from datetime import datetime
+from app import emailService
+from random import randint
 
 # Create your views here.
 
@@ -30,7 +32,7 @@ def submit_login(request):
         user = authenticate(username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect('/index.html')
+            return redirect('index.html')
         else:
             messages.error(request,'Usuário ou senha inválidos. Tentar novamente ou cadastre-se')
     return redirect('/')
@@ -39,6 +41,7 @@ def submit_login(request):
 def submit_register(request):
     data = {}
     data['msg'] = []
+    x = 0
     if request.method == 'POST':
         username = request.POST.get('username')
         first_name = request.POST.get('first_name')
@@ -55,7 +58,6 @@ def submit_register(request):
             val_email = User.objects.filter(email=email)
             if (len(val_username) > 0):
                 data['msg'].append('usuário já cadastrado!')
-                print("teste")
                 x = 1
             if (len(val_email) > 0):
                 data['msg'].append('E-mail já cadastrado!')
@@ -89,9 +91,29 @@ def submit_register(request):
         return render(request, 'register.html', data)
 
 def register(request):
-    print("teste register")
     return render(request, 'register.html')        
 
 @csrf_protect
 def recovery_pass(request):
-    return render(request, 'recovery_pass.html')
+    data = {}
+    data['msg'] = []
+    data['error'] = []
+    if request.method =='POST':
+        email = request.POST.get('email')
+        try:
+            if(email == ''):
+                data['error'].append('email inválido')
+            else:
+                val_user = User.objects.get(email=email)
+                if (val_user != None):
+                    newpass = randint(10000000,99999999)
+                    val_user.set_password(newpass)
+                    val_user.save()
+                    emailService.recoveryPass(newpass, val_user.username, email)
+                    data['msg'].append('Sua nova senha foi enviada no email!')
+                else:
+                    data['error'].append('email não cadastrado!')   
+        except:
+            data['error'].append('Ocorreu algum erro, tente novamente mais tarde!')
+            return render(request,'recovery_pass.html', data)  
+    return render(request, 'recovery_pass.html', data)

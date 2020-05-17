@@ -19,6 +19,7 @@ from app import views
 from django.conf.urls import url
 
 urlpatterns = [
+
     url(r'^admin/', admin.site.urls),
     url(r'^$', views.login_user, name='login'),
     url(r'^submit_register', views.submit_register, name='submit_register'),
@@ -27,8 +28,13 @@ urlpatterns = [
     url(r'^index', views.index, name='index'),
     url(r'^logout', views.logout_user, name='logout'),
     url(r'^register', views.register, name='register'),
-    #url(r'^register_submit', views.register_submit, name='register_submit'),
-    #url(r'^client/', views.client, name='client'),
+
+    #path("admin",admin.site.urls),
     #path("",views.login_user),
-    #path("submit",views.submit_login)
+    #path("submit",views.submit_login),
+    #path("submit_register",views.submit_register),
+    #path("register",views.register),
+    #path("recovery_pass",views.recovery_pass),
+    #path("index.html",views.index),
+    #path("/",views.logout_user)
 ]

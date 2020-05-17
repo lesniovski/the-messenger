@@ -16,3 +16,6 @@ Messaging system between friends
   - Colocar seguintes parametros:
   * SECRET_KEY=0atyt0aj^jy@w_*ylpmy9m$im4q_mahpiv8bkg&as-kh%6asg+
   * DEBUG=True
+  * EMAIL_FROM=(e-mail para disparar msg do servidor)
+  * PASS_EMAIL=(senha do e-mail)
+  * SMTP_CONFIG=(configuraçao smtp do email do servidor)
