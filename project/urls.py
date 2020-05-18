@@ -27,7 +27,7 @@ urlpatterns = [
     url(r'^submit', views.submit_login, name='submit_login'),
     url(r'^index', views.index, name='index'),
     url(r'^logout', views.logout_user, name='logout'),
-    url(r'^register', views.register, name='register'),
+    url(r'^find', views.index, name='find'),
 
     #path("admin",admin.site.urls),
     #path("",views.login_user),

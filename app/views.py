@@ -17,7 +17,16 @@ def login_user(request):
 
 @login_required(login_url='')
 def index(request):
-    return render(request, 'index.html')
+    data = {}
+    data['user'] = []
+    data['users'] = []
+    data['user'].append(request.user)
+    if request.method == 'POST':
+        var = request.POST.get('buscar')
+        users = User.objects.filter(username__contains=var)
+        for i in users:
+            data['users'].append(i)
+    return render(request, 'index.html', data)
 
 def logout_user(request):
     print(request.user)

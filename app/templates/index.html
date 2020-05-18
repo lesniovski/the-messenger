@@ -1,8 +1,65 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>LOGADO NESSA BAGAÇA</h1>
-<a href="/logout/">
-<button type="button" class="btn btn-outline-warning">LOGOUT</button>
-</a>
+
+<div class="container p-3 my-3 border mt-3 rounded">
+    <div class="row">
+        <div class="col-sm">
+            {% for user in user %}
+            <h2>The Messenger - {{ user }}</h2>
+            {% endfor %}
+        </div>
+        <div class="row justify-content-end">
+            <div class="col-sm">
+                <a href="/logout/">
+                    <button type="button" class="btn btn-danger">LOGOUT</button>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container border rounded">
+    <div class="row">
+        <div class="col-4 border rounded">
+            <div class="row text-center">
+                <form action="find" method="post">{% csrf_token %}
+                    <div class="row">
+                        <div class="col-10">
+                            <input type="text" , class="form-control" id="buscar" name="buscar"
+                                placeholder="Buscar Amigos">
+                        </div>
+                        <div class="col-2">
+                            <button type="submit" class="btn btn-success">Buscar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="col-8 border rounded">
+            <div class="row">
+                <div class="col-3">
+                    Resultado da busca:
+                </div>
+                <div class="col-5">
+                    {% for user in users %}
+                    <div>
+                        {{ user }} <a href="/index.html">Adicionar</a>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="col-4 border rounded" style="height: 200px;">
+            <div>
+                <h3>Coluna de Amigos</h3>
+            </div>
+        </div>
+        <div class="col-8 border rounded" style="height: 200px;">
+            <div>
+                <h3>
+                    Coluna de Mensagens
+                </h3>
+            </div>
+        </div>
+    </div>
 {% endblock content %}
