@@ -23,11 +23,13 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', views.login_user, name='login'),
     url(r'^submit_register', views.submit_register, name='submit_register'),
+    url(r'^register', views.register, name='register'),
     url(r'^recovery_pass', views.recovery_pass, name='recovery_pass'),
     url(r'^submit', views.submit_login, name='submit_login'),
     url(r'^index', views.index, name='index'),
     url(r'^logout', views.logout_user, name='logout'),
     url(r'^find', views.index, name='find'),
+    url(r'^friend', views.friend, name='friend'),
 
     #path("admin",admin.site.urls),
     #path("",views.login_user),

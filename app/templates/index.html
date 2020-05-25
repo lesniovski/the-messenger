@@ -8,6 +8,10 @@
             {% for user in user %}
             <h2>The Messenger - {{ user }}</h2>
             {% endfor %}
+
+            {% for erro in error %}
+            <h3>{{ erro }}</h3>
+            {% endfor %}
         </div>
         <div class="row justify-content-end">
             <div class="col-sm">
@@ -22,7 +26,7 @@
     <div class="row">
         <div class="col-4 border rounded">
             <div class="row text-center">
-                <form action="find" method="post">{% csrf_token %}
+                <form action="/find/" method="post">{% csrf_token %}
                     <div class="row">
                         <div class="col-10">
                             <input type="text" , class="form-control" id="buscar" name="buscar"
@@ -42,8 +46,13 @@
                 </div>
                 <div class="col-5">
                     {% for user in users %}
-                    <div>
-                        {{ user }} <a href="/index.html">Adicionar</a>
+                    <div class="row">
+                        <div class="col-4">
+                            {{ user.username }}
+                        </div>
+                        <div class="col-2">
+                            <a href="/friend/?id={{ user.id }}&op=add">Adicionar</a>
+                        </div>
                     </div>
                     {% endfor %}
                 </div>
@@ -52,6 +61,18 @@
         <div class="col-4 border rounded" style="height: 200px;">
             <div>
                 <h3>Coluna de Amigos</h3>
+
+                {% for friend in friends %}
+                <div class="row">
+                    <div class="col-6">
+                        {{ friend.friend_id.username }}
+                    </div>
+                    <div class="col-2">
+                        <a href="/friend/?id={{ friend.friend_id.id }}&op=del">Remover</a>
+                    </div>
+                </div>
+                {% endfor %}
+
             </div>
         </div>
         <div class="col-8 border rounded" style="height: 200px;">
@@ -62,4 +83,4 @@
             </div>
         </div>
     </div>
-{% endblock content %}
+    {% endblock content %}
