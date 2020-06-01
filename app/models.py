@@ -124,3 +124,5 @@ class UserFriend(models.Model):
     my_id = models.IntegerField()
     friend_id = models.ForeignKey(AuthUser, models.DO_NOTHING)
     data_add = models.DateTimeField(auto_now_add=True)
+    status = models.TextField(default="A")
+    analyzed = models.BooleanField(default=False)

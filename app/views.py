@@ -17,37 +17,49 @@ def login_user(request):
 
 @login_required(login_url='')
 def index(request):
-    data = {}
-    data['user'] = []
-    data['users'] = []
-    data['user'].append(request.user)
-    data['friends'] = UserFriend.objects.filter(my_id=request.user.id)
-    #data['friends'] = UserFriend.objects.filter(friend_id=request.user.id)
+    try:
+        data = {}
+        data['user'] = []
+        data['users'] = []
+        data['user'].append(request.user)
+        user = AuthUser.objects.get(id=request.user.id)
+        data['friends'] = UserFriend.objects.filter(my_id=request.user.id, status="C")
+        data['friendsP'] = UserFriend.objects.filter(friend_id=user, status="A",analyzed=False)
+        data['friendsAG'] = UserFriend.objects.filter(my_id=request.user.id, status="A", analyzed=False)
+        data['friendsPA'] = []
+        for item in data['friendsP']:
+            friend = AuthUser.objects.get(id=item.my_id)
+            data['friendsPA'].append(friend)
+        data['friendsA'] = UserFriend.objects.filter(my_id=request.user.id,status="C",analyzed=False)
+        data['friendsR'] = UserFriend.objects.filter(my_id=request.user.id,status="R",analyzed=False)
 
-    if request.method == 'POST':
-        var = request.POST.get('buscar')
-        data['users'] = AuthUser.objects.filter(username__contains=var).exclude(
-            id=request.user.id).exclude(userfriend__in=data['friends'])
-        #for i in data['friends']:
-        #    userRemove = AuthUser.objects.get(id=i.friend_id.id)
-        #    for j in users:
-        #        if (j == userRemove):
-        #            del(users[j])
-        #    print(userRemove)
-        #    print(i.friend_id.username)
-        #selected_related
-        #users = AuthUser.objects.filter(username__contains=var).exclude(id=request.user.id).exclude(id=data['friends'][i].UserFriend.friend_id)
-        #auxUsers = UserFriend.objects.filter(friend_id(username__contains=var))
-        #for i in auxUser:
-        #    for j in users:
-        #        if(auxUsers[i].friend_id.id == users[j].AuthUser.id):
-        #            users[j].remove
-        #for i in users:
-        #    data['users'].append(i)
+        if request.method == 'POST':
+            var = request.POST.get('buscar')
+            data['users'] = AuthUser.objects.filter(username__contains=var).exclude(
+                id=request.user.id).exclude(userfriend__in=data['friends'])
+        
+        if request.method == 'GET':
+            id = request.GET.get('id')
+            op = request.GET.get('op')
+            friend = AuthUser.objects.get(id=id)
+            if(id != None and op != None):
+                fr = UserFriend.objects.filter(my_id=request.user.id,friend_id=friend)
+                if (op == "ok"):
+                    for item in fr:
+                        item.analyzed = True
+                        item.save()
+                elif(op == "okR"):
+                    for item in fr:
+                        item.delete()
+            else:
+                data['msg'] = ('Erro ao confirmar informações de amizade')
+    except:
+            data['msg'] = ('Erro ao verificar carregar dados!')
+            return render(request, 'index.html', data)
+
     return render(request, 'index.html', data)
 
 def logout_user(request):
-    print(request.user)
     logout(request)
     return redirect('/')
 
@@ -149,30 +161,38 @@ def recovery_pass(request):
 @csrf_protect
 def friend(request):
     data = {}
-    #data['user'] = []
-    #data['users'] = []
-    #data['user'].append(request.user)
-    #data['friends'] = []
     data['error'] = []
     if request.method == 'GET':
         id = request.GET.get('id')
         op = request.GET.get('op')
         if(id != None and op != None):
             try:           
+                user = AuthUser.objects.get(id=request.user.id)
                 friend = AuthUser.objects.get(id=id)
                 iduser = int(request.user.id)
-                #x = UserFriend.objects.filter(my_id=iduser,friend_id=friend)
                 if(friend == ''):
                     data['error'].append('Amigo inválido')
-                #elif(x[0].friend_id == friend):
-                #    data['error'].append('Amigo já adicionado')
-                #    return redirect(request, 'index', data)
                 elif(op == "add"):
-                    fr = UserFriend(my_id=iduser,friend_id=friend)
+                    fr = UserFriend(my_id=iduser,friend_id=friend,status="A",analyzed=False)
                     fr.save()
                 elif(op == "del"):
-                    fr = UserFriend.objects.get(my_id=iduser,friend_id=friend)
-                    fr.delete()
+                    fr = UserFriend.objects.filter(my_id=iduser,friend_id=friend)
+                    for item in fr:
+                        item.delete()
+                elif(op == "apr"):
+                    fra = UserFriend.objects.filter(my_id=id, friend_id=user)
+                    for item in fra:
+                        item.status = "C"
+                        item.analyzed = False
+                        item.save()
+                    fr = UserFriend(my_id=iduser,friend_id=friend,status="C",analyzed=True)
+                    fr.save()
+                elif(op == "rec"):
+                    fra = UserFriend.objects.filter(my_id=friend.id, friend_id=user)
+                    for item in fra:
+                        item.status = "R"
+                        item.analyzed = False
+                        item.save()
             except:
                 data['error'].append("Erro ao adicionar amigo! Tente novamente")
         return redirect('index')

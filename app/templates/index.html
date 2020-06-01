@@ -23,6 +23,53 @@
     </div>
 </div>
 <div class="container border rounded">
+    {% for friend in friendsPA %}
+    <div class="row" style="margin-top: 1%; margin-bottom: 1%;">
+        <div class="col-6">
+            <h5 style="color: blue;">Usuário: {{ friend.username }} - Deseja ser seu amigo! </h5>
+        </div>
+        <div class="col-1">
+            <a href="/friend/?id={{ friend.id }}&op=apr"><button type="button" class="btn btn-success">Aceitar</button></a>
+        </div>
+        <div class="col-1">
+            <a href="/friend/?id={{ friend.id }}&op=rec"><button type="button" class="btn btn-danger">Recusar</button></a>
+        </div>
+    </div>
+    {% endfor %}
+
+    {% for friend in friendsAG %}
+    <div class="row" style="margin-top: 1%; margin-bottom: 1%;">
+        <div class="col-">
+            <h5 style="color: green;">Aguardando pedido de aceite de amizade do Usuário: {{ friend.friend_id.username }}</h5>
+        </div>
+    </div>
+    {% endfor %}
+
+    {% for friend in friendsA %}
+    <div class="row" style="margin-top: 1%; margin-bottom: 1%;">
+        <div class="col-6">
+            <h5 style="color: blue;">Usuário: {{ friend.friend_id.username }} - Aceitou seu pedido de amizade </h5>
+        </div>
+        <div class="col-1">
+            <a href="/index/?id={{ friend.friend_id.id }}&op=ok"><button type="button" class="btn btn-primary">Confirmar</button></a>
+        </div>
+    </div>
+    {% endfor %}
+
+    {% for friend in friendsR %}
+    <div class="row" style="margin-top: 1%; margin-bottom: 1%;">
+        <div class="col-6">
+            <h5 style="color: red;">Usuário: {{ friend.friend_id.username }} - Recusou seu pedido de amizade</h5>
+        </div>
+        <div class="col-1">
+            <a href="/index/?id={{ friend.friend_id.id }}&op=okR"><button type="button" class="btn btn-warning">Confirmar</button></a>
+        </div>
+    </div>
+    {% endfor %}
+
+</div>
+
+<div class="container border rounded">
     <div class="row">
         <div class="col-4 border rounded">
             <div class="row text-center">
@@ -60,7 +107,7 @@
         </div>
         <div class="col-4 border rounded" style="height: 200px;">
             <div>
-                <h3>Coluna de Amigos</h3>
+                <h3>Amigos:</h3>
 
                 {% for friend in friends %}
                 <div class="row">
