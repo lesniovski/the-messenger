@@ -1,0 +1,28 @@
+<div>
+    <h3>Teste de página</h3>
+
+    <div>
+        <form action="send_message" method="post">{% csrf_token %}
+            <div>
+                {% for message in error %}
+                <div class="alert alert-danger">
+                    <strong>Erro!</strong> {{ message }}
+                </div>
+                {% endfor %}
+                {% for user in users %}
+                <label id="friend">{{ user.username }}</label>
+                <input type="number" name="friend_id" id="friend_id" value={{ user.id }} hidden >
+                {% endfor %}
+                <footer class="footer navbar-fixed-bottom">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" name="message" id="message"
+                            placeholder="Digite aqui sua mensagem" aria-label="Digite aqui sua mensagem"
+                            aria-describedby="basic-addon2">
+                        <div class="input-group-append">
+                            <button class="btn btn-success" type="submit">Enviar</button>
+                        </div>
+                    </div>
+                </footer>
+            </div>
+        </form>
+    </div>

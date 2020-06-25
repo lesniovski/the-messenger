@@ -4,10 +4,11 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .models import AuthUser, UserFriend
+from .models import AuthUser, UserFriend, MessagesFriend
 from datetime import datetime
 from app import emailService
 from random import randint
+from django.db.models import Q
 
 # Create your views here.
 
@@ -71,7 +72,7 @@ def submit_login(request):
         user = authenticate(username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect('index.html')
+            return redirect('index')
         else:
             messages.error(request,'Usuário ou senha inválidos. Tentar novamente ou cadastre-se')
     return redirect('/')
@@ -196,3 +197,52 @@ def friend(request):
             except:
                 data['error'].append("Erro ao adicionar amigo! Tente novamente")
         return redirect('index')
+
+@csrf_protect
+def messagesP(request):
+    print("Passei aqui")
+    data = {}
+    data['messages'] = []
+    data['users'] = []
+    data['erro'] = []
+    if request.method == 'GET':
+        id = request.GET.get('id')
+        op = request.GET.get('op')
+        if(id != None and op != None):
+            try:           
+                user = AuthUser.objects.get(id=request.user.id)
+                friend = AuthUser.objects.get(id=id)
+                iduser = int(request.user.id)
+                data['messages'] = get_messages(iduser, friend)
+                data['users'].append(friend)
+            except:
+                data['erro'].append("Erro ao carregar mensagens! Tente novamente")
+    return render(request, 'messages.html', data)
+    #return redirect('index', {'messages': data})
+
+def get_messages(iduser, friend):
+    try:
+        idm1 = UserFriend.objects.get(my_id=iduser, friend_id=friend)
+        user = AuthUser.objects.get(id=iduser)
+        idm2 = UserFriend.objects.get(my_id=friend.id, friend_id=user)
+        arrayMessages = MessagesFriend.objects.filter( Q(friend=idm1) | Q(friend=idm2))[-10:]
+        return sorted(arrayMessages, key = MessagesFriend.get_datemsg)
+    except:
+        return None
+@csrf_protect
+def send_message(request):
+    data = {}
+    data['erro'] = []
+    if request.method == 'POST':
+        message = request.POST.get('message')
+        try:
+            friend_id = request.POST.get('friend_id')
+            friend = AuthUser.objects.get(id=friend_id)
+            idm1 = UserFriend.objects.get(my_id=request.user.id, friend_id=friend)
+            print(idm1)
+            msg = MessagesFriend(friend=idm1,message=message)
+            msg.save()
+        except: 
+            data['erro'].append("Erro ao carregar mensagens! Tente novamente")
+        return render(request, 'index.html')
+    #redirect('messagesP')

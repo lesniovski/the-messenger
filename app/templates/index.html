@@ -29,10 +29,12 @@
             <h5 style="color: blue;">Usuário: {{ friend.username }} - Deseja ser seu amigo! </h5>
         </div>
         <div class="col-1">
-            <a href="/friend/?id={{ friend.id }}&op=apr"><button type="button" class="btn btn-success">Aceitar</button></a>
+            <a href="/friend/?id={{ friend.id }}&op=apr"><button type="button"
+                    class="btn btn-success">Aceitar</button></a>
         </div>
         <div class="col-1">
-            <a href="/friend/?id={{ friend.id }}&op=rec"><button type="button" class="btn btn-danger">Recusar</button></a>
+            <a href="/friend/?id={{ friend.id }}&op=rec"><button type="button"
+                    class="btn btn-danger">Recusar</button></a>
         </div>
     </div>
     {% endfor %}
@@ -40,7 +42,8 @@
     {% for friend in friendsAG %}
     <div class="row" style="margin-top: 1%; margin-bottom: 1%;">
         <div class="col-">
-            <h5 style="color: green;">Aguardando pedido de aceite de amizade do Usuário: {{ friend.friend_id.username }}</h5>
+            <h5 style="color: green;">Aguardando pedido de aceite de amizade do Usuário: {{ friend.friend_id.username }}
+            </h5>
         </div>
     </div>
     {% endfor %}
@@ -51,7 +54,8 @@
             <h5 style="color: blue;">Usuário: {{ friend.friend_id.username }} - Aceitou seu pedido de amizade </h5>
         </div>
         <div class="col-1">
-            <a href="/index/?id={{ friend.friend_id.id }}&op=ok"><button type="button" class="btn btn-primary">Confirmar</button></a>
+            <a href="/index/?id={{ friend.friend_id.id }}&op=ok"><button type="button"
+                    class="btn btn-primary">Confirmar</button></a>
         </div>
     </div>
     {% endfor %}
@@ -62,7 +66,8 @@
             <h5 style="color: red;">Usuário: {{ friend.friend_id.username }} - Recusou seu pedido de amizade</h5>
         </div>
         <div class="col-1">
-            <a href="/index/?id={{ friend.friend_id.id }}&op=okR"><button type="button" class="btn btn-warning">Confirmar</button></a>
+            <a href="/index/?id={{ friend.friend_id.id }}&op=okR"><button type="button"
+                    class="btn btn-warning">Confirmar</button></a>
         </div>
     </div>
     {% endfor %}
@@ -111,10 +116,23 @@
 
                 {% for friend in friends %}
                 <div class="row">
-                    <div class="col-6">
+                    <div class="col-4" style="margin-top: 2%;">
                         {{ friend.friend_id.username }}
                     </div>
-                    <div class="col-2">
+                    <div class="col-4">
+                        <input type="hidden" id="myVar" name="variable" value="{{ friend.friend_id.id }}">
+                        <button type="button" id="{{ friend.friend_id.username }}" class="btn btn-warning">Conversar</button>
+                        <script>
+                            $(document).ready(function () {
+                                $("#{{ friend.friend_id.username }}").click(function () {
+                                    $(function () {
+                                        $("#cont-messages").load("messages/?id={{ friend.friend_id.id }}&op=msg");
+                                    });
+                                })
+                            });
+                        </script>
+                    </div>
+                    <div class="col-4">
                         <a href="/friend/?id={{ friend.friend_id.id }}&op=del">Remover</a>
                     </div>
                 </div>
@@ -126,6 +144,9 @@
             <div>
                 <h3>
                     Coluna de Mensagens
+                    <div id="cont-messages">
+                        
+                    </div>
                 </h3>
             </div>
         </div>

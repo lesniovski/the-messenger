@@ -30,7 +30,8 @@ urlpatterns = [
     url(r'^logout', views.logout_user, name='logout'),
     url(r'^find', views.index, name='find'),
     url(r'^friend', views.friend, name='friend'),
-
+    url(r'^messages', views.messagesP, name='messages'),
+    url(r'^send_message', views.send_message, name='send_message'),
     #path("admin",admin.site.urls),
     #path("",views.login_user),
     #path("submit",views.submit_login),

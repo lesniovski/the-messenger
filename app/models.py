@@ -126,3 +126,11 @@ class UserFriend(models.Model):
     data_add = models.DateTimeField(auto_now_add=True)
     status = models.TextField(default="A")
     analyzed = models.BooleanField(default=False)
+
+class MessagesFriend(models.Model):
+    friend = models.ForeignKey(UserFriend, models.DO_NOTHING)
+    data_msg = models.DateTimeField(auto_now_add=True)
+    message = models.TextField()
+
+    def get_datemsg(self):
+      return self.data_msg
